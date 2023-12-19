@@ -14,6 +14,17 @@ pipeline {
             }
         }
 
+        stage('Test') {
+            steps {
+                script {
+                    def containerId = docker.run("-p 8080:8080 -d ${DOCKER_IMAGE}")
+                    sh "sleep 10" // Wait for container to start (adjust as needed)
+                    sh "docker exec $containerId ls" // Example command to test container launch
+                    docker.stop(containerId)
+                }
+            }
+        }
+
         stage('Push') {
             steps {
                 script {
@@ -27,7 +38,7 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline succeeded! Image built and pushed to DockerHub.'
+            echo 'Pipeline succeeded! Image built, tested, and pushed to DockerHub.'
         }
         failure {
             echo 'Pipeline failed!'
