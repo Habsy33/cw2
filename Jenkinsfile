@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'your-dockerhub-username/your-image-name:tag' // Replace with your DockerHub username and image name
+        DOCKER_IMAGE = 'habsy33/dockerfile:2.0'
         DOCKER_BIN = '/usr/bin/docker' // Replace with the correct path to the docker binary in your system
     }
 
