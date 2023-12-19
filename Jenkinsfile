@@ -19,10 +19,10 @@ pipeline {
             steps {
                 script {
                     // Start the container with a different port mapping
-                    sh "${DOCKER_BIN} run -p 8090:8080 -d --name my_container1 ${DOCKER_IMAGE}"
+                    sh "${DOCKER_BIN} run -p 80:8080 -d --name my_container1 ${DOCKER_IMAGE}"
                     
                     // Check if the container is running
-                    def containerStatus = sh(script: "${DOCKER_BIN} inspect -f {{.State.Running}} my_container", returnStdout: true).trim()
+                    def containerStatus = sh(script: "${DOCKER_BIN} inspect -f {{.State.Running}} my_container1", returnStdout: true).trim()
                     
                     if (containerStatus == 'true') {
                         echo "Container is running"
