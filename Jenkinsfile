@@ -17,10 +17,18 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    def containerId = docker.run("-p 8080:8080 -d ${DOCKER_IMAGE}")
-                    sh "sleep 10" // Wait for container to start (adjust as needed)
-                    sh "docker exec $containerId ls" // Example command to test container launch
-                    docker.stop(containerId)
+                    // Start the container
+                    sh "docker run -p 8080:8080 -d ${DOCKER_IMAGE}"
+                    
+                    // Wait for the container to start (adjust sleep duration as needed)
+                    sh "sleep 10"
+                    
+                    // Example command to test container launch
+                    sh "docker exec $(docker ps -q) ls"
+                    
+                    // Stop and remove the container
+                    sh "docker stop $(docker ps -q)"
+                    sh "docker rm $(docker ps -aq)"
                 }
             }
         }
