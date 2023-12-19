@@ -24,11 +24,11 @@ pipeline {
                     sh "sleep 10"
                     
                     // Example command to test container launch
-                    sh "docker exec $(docker ps -q) ls"
+                    sh 'docker exec $(docker ps -q) ls'
                     
                     // Stop and remove the container
-                    sh "docker stop $(docker ps -q)"
-                    sh "docker rm $(docker ps -aq)"
+                    sh 'docker stop $(docker ps -q)'
+                    sh 'docker rm $(docker ps -aq)'
                 }
             }
         }
