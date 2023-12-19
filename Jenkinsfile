@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'habsy33/dockerfile:2.0'
+        DOCKER_IMAGE = 'your-dockerhub-username/your-image-name:tag' // Replace with your DockerHub username and image name
         DOCKER_BIN = '/usr/bin/docker' // Replace with the correct path to the docker binary in your system
     }
 
@@ -18,8 +18,8 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    // Start the container
-                    sh "${DOCKER_BIN} run -p 8080:8080 -d --name my_container ${DOCKER_IMAGE}"
+                    // Start the container with a different port mapping
+                    sh "${DOCKER_BIN} run -p 8090:8080 -d --name my_container ${DOCKER_IMAGE}"
                     
                     // Check if the container is running
                     def containerStatus = sh(script: "${DOCKER_BIN} inspect -f {{.State.Running}} my_container", returnStdout: true).trim()
