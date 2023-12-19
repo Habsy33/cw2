@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'habsy33/dockerfile:2.0'
+        DOCKER_BIN = '/usr/bin/docker' // Replace with the correct path to the docker binary in your system
     }
 
     stages {
@@ -18,17 +19,16 @@ pipeline {
             steps {
                 script {
                     // Start the container
-                    sh "docker run -p 8080:8080 -d ${DOCKER_IMAGE}"
+                    sh "${DOCKER_BIN} run -p 8080:8080 -d --name my_container ${DOCKER_IMAGE}"
                     
-                    // Wait for the container to start (adjust sleep duration as needed)
-                    sh "sleep 10"
+                    // Check if the container is running
+                    def containerStatus = sh(script: "${DOCKER_BIN} inspect -f {{.State.Running}} my_container", returnStdout: true).trim()
                     
-                    // Example command to test container launch
-                    sh 'docker exec $(docker ps -q) ls'
-                    
-                    // Stop and remove the container
-                    sh 'docker stop $(docker ps -q)'
-                    sh 'docker rm $(docker ps -aq)'
+                    if (containerStatus == 'true') {
+                        echo "Container is running"
+                    } else {
+                        error "Container failed to start"
+                    }
                 }
             }
         }
